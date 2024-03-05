@@ -1,5 +1,5 @@
 DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-SHELL := /bin/sh
+SHELL := /bin/bash
 ifeq ($(OS),Windows_NT)
     LDFLAGS=-lbcrypt -Wl,--subsystem,console
 endif

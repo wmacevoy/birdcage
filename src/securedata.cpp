@@ -10,28 +10,35 @@
 
 #include "birdcage/securedata.h"
 
-namespace birdcage {
-void SecureDataLock(void *data, size_t size) {
+namespace birdcage
+{
+  void SecureDataLock(void *data, size_t size)
+  {
 #ifdef _WIN32
-  if (!VirtualLock(data,size)) {
-    throw std::bad_alloc();
-  }
+    if (!VirtualLock(data, size))
+    {
+      throw std::bad_alloc();
+    }
 #else
-  if (mlock(data,size) != 0) {
-    throw std::bad_alloc();
-  }
+    if (mlock(data, size) != 0)
+    {
+      throw std::bad_alloc();
+    }
 #endif
-}
+  }
 
-void SecureDataUnlock(void *data, size_t size) {
+  void SecureDataUnlock(void *data, size_t size)
+  {
 #ifdef _WIN32
-  if (!VirtualUnlock(data,size)) {
-    std::abort();
-  }
+    if (!VirtualUnlock(data, size))
+    {
+      std::abort();
+    }
 #else
-  if (munlock(data,size) != 0) {
-    std::abort();
-  }
+    if (munlock(data, size) != 0)
+    {
+      std::abort();
+    }
 #endif
-}
+  }
 } // namespace birdcage
