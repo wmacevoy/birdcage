@@ -26,7 +26,8 @@ VER=$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 POST:
 	bash -c 'type mkdir'
 	bash -c 'type bash'
-	bash -c 'echo CXX=$(CXX)'
+	bash -c 'SHELL=$(SHELL)'
+	bash -c 'ls -ld $(SHELL)'
  
 $(BUILD)/$(TMP)/monitor.cpp.o : $(TESTSRC)/monitor.cpp
 	$(MKTARGETDIR)
