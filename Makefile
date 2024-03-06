@@ -2,7 +2,7 @@ DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 SHELL := /bin/bash
 ifeq ($(OS),Windows_NT)
     LDFLAGS=-lbcrypt -Wl,--subsystem,console
-	MKTARGETDIR=mkdir $(subst /,\\,$(dir $@))
+	MKTARGETDIR=mkdir $(subst /,\,$(dir $@))
 else
 	MKTARGETDIR=mkdir -p $(dir $@)
 endif
