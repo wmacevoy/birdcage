@@ -28,19 +28,19 @@ jobs:
         echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
 
     - name: Build and Test Randomize
-      run: make dirs test-randomize
+      run: make test-randomize
       shell: bash
 
     - name: Build and Test Canary
-      run: make dirs test-canary
+      run: make test-canary
       shell: bash
 
     - name: Build and Test SecureData
-      run: make dirs test-securedata
+      run: make test-securedata
       shell: bash
 
     - name: Build and Test SecureArray
-      run: make dirs test-securearray
+      run: make test-securearray
       shell: bash
 
     - name: Success Message
