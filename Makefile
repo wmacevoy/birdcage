@@ -17,10 +17,14 @@ TMP=tmp
 BIN=bin
 TESTSRC=tests
 TESTBIN=tests/$(BIN)
-
+VERSION_MAJOR=1
+VERSION_MINOR=0
+VERSION_PATCH=0
+VER=$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
+ 
 $(BUILD)/$(TMP)/monitor.cpp.o : $(TESTSRC)/monitor.cpp
 	$(MKTARGETDIR)
-	$(CXX) -c -o $@ $(CXXFLAGS) $<
+	$(CXX) -o $@ $(CXXFLAGS) $< $(LDFLAGS)
 
 $(BUILD)/$(TESTBIN)/monitor.exe : $(BUILD)/$(TMP)/monitor.cpp.o
 	$(MKTARGETDIR)
