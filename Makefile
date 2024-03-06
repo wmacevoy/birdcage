@@ -18,24 +18,6 @@ BIN=bin
 TESTSRC=tests
 TESTBIN=tests/$(BIN)
 
-.PHONY: dirs
-dirs : $(BUILD)/$(TMP) $(BUILD)/$(BIN) $(BUILD)/$(LIB) $(BUILD)/$(INC) $(BUILD)/$(TESTBIN)
-
-$(BUILD)/$(BIN) :
-	$(MKDIR) $(BUILD)/$(BIN) || true
-
-$(BUILD)/$(TMP) :
-	$(MKDIR) $(BUILD)/$(TMP) || true
-
-$(BUILD)/$(LIB) :
-	$(MKDIR) $(BUILD)/$(LIB) || true
-
-$(BUILD)/$(INC) :
-	$(MKDIR) $(BUILD)/$(INC) || true
-
-$(BUILD)/$(TESTBIN) :
-	$(MKDIR) $(BUILD)/$(TESTBIN) || true
-	
 $(BUILD)/$(TMP)/monitor.cpp.o : $(TESTSRC)/monitor.cpp
 	$(MKDIR) $(dir $@) || true
 	$(CXX) -c -o $@ $(CXXFLAGS) $<
@@ -108,7 +90,7 @@ test-securearray : $(BUILD)/$(TESTBIN)/testsecurearray.exe $(BUILD)/$(TESTBIN)/m
 		$(BUILD)/$(TESTBIN)/monitor.exe fail $(BUILD)/$(TESTBIN)/testsecurearray.exe --ok=false
 
 .PHONY: all
-all : dirs tests
+all : tests
 
 .PHONY: tests
 tests : test-randomize test-canary test-securedata test-securearray
