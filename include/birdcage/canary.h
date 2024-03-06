@@ -17,7 +17,7 @@ namespace birdcage
         // set to reference value by constructor,
         // check by destructor
     private:
-        const Type instance;
+        volatile Type instance;
 
         // initialize instance
     public:
