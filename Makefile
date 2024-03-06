@@ -21,6 +21,12 @@ VERSION_MAJOR=1
 VERSION_MINOR=0
 VERSION_PATCH=0
 VER=$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
+
+.PHONY: POST
+POST:
+	bash -c 'type mkdir'
+	bash -c 'type bash'
+	bash -c 'echo CXX=$(CXX)'
  
 $(BUILD)/$(TMP)/monitor.cpp.o : $(TESTSRC)/monitor.cpp
 	$(MKTARGETDIR)
@@ -97,7 +103,7 @@ test-securearray : $(BUILD)/$(TESTBIN)/testsecurearray.exe $(BUILD)/$(TESTBIN)/m
 all : tests
 
 .PHONY: tests
-tests : test-randomize test-canary test-securedata test-securearray
+tests : POST test-randomize test-canary test-securedata test-securearray
 
 .PHONY: clean
 clean :
