@@ -33,7 +33,7 @@ jobs:
         cd build
         cmake ..
         cmake --build .
-        
+
     - name: Build Windows
       if: matrix.os == 'windows-latest'
       run: |
@@ -52,7 +52,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: |
         cd build
-        ctest --config Release
+        ctest -C Release
   
     - name: Success Message
       run: echo "Build and tests passed on all platforms."
