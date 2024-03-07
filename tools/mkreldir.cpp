@@ -50,7 +50,7 @@ void makedir(const sysstring &dir)
 #else
   mode_t mode = umask(0);
   umask(mode);
-  mode = 0x755 & ~mode;
+  mode = 0755 & ~mode;
   int status = mkdir(dir.c_str(), mode);
   if (status != 0 && errno != EEXIST)
   {
