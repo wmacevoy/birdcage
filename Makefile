@@ -1,5 +1,5 @@
 DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-SHELL := $(shell env bash -c 'which bash')
+BASH := $(shell env bash -c 'which bash')
 ifeq ($(OS),Windows_NT)
     LDFLAGS=-lbcrypt -Wl,--subsystem,console
 	MKTARGETDIR=mkdir $(subst /,\,$(dir $@))
@@ -24,11 +24,9 @@ VER=$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 
 .PHONY: power-on-self-test
 power-on-self-test:
-	bash -c 'type mkdir'
-	bash -c 'type bash'
-	bash -c 'SHELL=$(SHELL)'
-	bash -c 'ls -ld $(SHELL)'
-	echo $$BASH_VERSION
+	"$(BASH)" -c 'type mkdir'
+	"$(BASH)" -c 'type bash'
+	"$(BASH)" -c 'echo "$(BASH)"'
  
 $(BUILD)/$(TMP)/monitor.cpp.o : $(TESTSRC)/monitor.cpp
 	$(MKTARGETDIR)
