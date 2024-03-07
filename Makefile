@@ -1,14 +1,5 @@
 DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 BASH := $(shell env bash -c 'which bash')
-ifeq ($(OS),Windows_NT)
-    LDFLAGS=-lbcrypt -Wl,--subsystem,console
-	MKTARGETDIR=mkreldir.exe $(dir $@)
-else
-	MKTARGETDIR=mkdir -p $(dir $@)
-endif
-
-CXXFLAGS=-O -g -std=c++17 -I$(INC)
-
 TOOLS=tools
 BUILD=build
 SRC=src
@@ -17,11 +8,23 @@ INC=include
 TMP=tmp
 BIN=bin
 TESTSRC=tests
-TESTBIN=tests/$(BIN)
+TESTBIN=tests$(FS)$(BIN)
 VERSION_MAJOR=1
 VERSION_MINOR=0
 VERSION_PATCH=0
 VER=$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
+
+ifeq ($(OS),Windows_NT)
+    LDFLAGS=-lbcrypt -Wl,--subsystem,console
+	MKTARGETDIR=mkdir $(dir $@) || true
+	FS=\
+else
+	MKTARGETDIR=mkdir -p $(dir $@)
+	FS=/
+endif
+
+CXXFLAGS=-O -g -std=c++17 -I$(INC)
+
 
 .PHONY: power-on-self-test
 power-on-self-test:
@@ -32,35 +35,35 @@ power-on-self-test:
 .PHONY: tools
 tools : mkreldir.exe
 
-mkreldir.exe : $(TOOLS)/mkreldir.cpp
-	$(CXX) -o $@ $(CXXFLAGS) $(TOOLS)/mkreldir.cpp
+mkreldir.exe : $(TOOLS)$(FS)mkreldir.cpp
+	$(CXX) -o $@ $(CXXFLAGS) $(TOOLS)$(FS)mkreldir.cpp
 
-$(TOOLS)/monitor.exe : $(TOOLS)/monitor.cpp
-	$(CXX) -o $@ $(CXXFLAGS) $(TOOLS)/monitor.cpp
+$(TOOLS)$(FS)monitor.exe : $(TOOLS)$(FS)monitor.cpp
+	$(CXX) -o $@ $(CXXFLAGS) $(TOOLS)$(FS)monitor.cpp
 
-$(BUILD)/$(TMP)/monitor.cpp.o : $(TESTSRC)/monitor.cpp
+$(BUILD)$(FS)$(TMP)$(FS)monitor.cpp.o : $(TESTSRC)$(FS)monitor.cpp
 	$(MKTARGETDIR)
 	$(CXX) -c -o $@ $(CXXFLAGS) $< $(LDFLAGS)
 
-$(BUILD)/$(TESTBIN)/monitor.exe : $(BUILD)/$(TMP)/monitor.cpp.o
+$(BUILD)$(FS)$(TESTBIN)$(FS)monitor.exe : $(BUILD)$(FS)$(TMP)$(FS)monitor.cpp.o
 	$(MKTARGETDIR)
 	$(CXX) -o $@ $(CXXFLAGS) $< $(LDFLAGS)
 
-$(BUILD)/$(TMP)/randomize.cpp.o : $(SRC)/randomize.cpp $(INC)/birdcage/randomize.h
+$(BUILD)$(FS)$(TMP)$(FS)randomize.cpp.o : $(SRC)$(FS)randomize.cpp $(INC)$(FS)birdcage$(FS)randomize.h
 	$(MKTARGETDIR)
 	$(CXX) -c -o $@ $(CXXFLAGS) $<
 
-$(BUILD)/$(TMP)/testrandomize.cpp.o : $(TESTSRC)/testrandomize.cpp $(INC)/birdcage/randomize.h
+$(BUILD)$(FS)$(TMP)$(FS)testrandomize.cpp.o : $(TESTSRC)$(FS)testrandomize.cpp $(INC)$(FS)birdcage$(FS)randomize.h
 	$(MKTARGETDIR)
 	$(CXX) -c -o $@ $(CXXFLAGS) $<
 
-$(BUILD)/$(TESTBIN)/testrandomize.exe : $(BUILD)/$(TMP)/testrandomize.cpp.o $(BUILD)/$(TMP)/randomize.cpp.o
+$(BUILD)$(FS)$(TESTBIN)$(FS)testrandomize.exe : $(BUILD)$(FS)$(TMP)$(FS)testrandomize.cpp.o $(BUILD)$(FS)$(TMP)$(FS)randomize.cpp.o
 	$(MKTARGETDIR)
 	$(CXX) -o $@ $(CXXFLAGS) $^ $(LDFLAGS)
 
 .PHONY: test-randomize
-test-randomize: $(BUILD)/$(TESTBIN)/testrandomize.exe $(BUILD)/$(TESTBIN)/monitor.exe
-	$(BUILD)/$(TESTBIN)/monitor.exe pass $(BUILD)/$(TESTBIN)/testrandomize.exe
+test-randomize: $(BUILD)$(FS)$(TESTBIN)$(FS)testrandomize.exe $(BUILD)$(FS)$(TESTBIN)$(FS)monitor.exe
+	$(BUILD)$(FS)$(TESTBIN)$(FS)monitor.exe pass $(BUILD)$(FS)$(TESTBIN)$(FS)testrandomize.exe
 
 $(BUILD)/$(TMP)/canary.cpp.o : $(SRC)/canary.cpp $(INC)/birdcage/canary.h $(INC)/birdcage/randomize.h
 	$(MKTARGETDIR)
