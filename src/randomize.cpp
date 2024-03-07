@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <bcrypt.h>
 #include <cstdlib>
+#include <stdint.h>
 #pragma comment(lib, "bcrypt.lib")
 #include "birdcage/randomize.h"
 #else
