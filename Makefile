@@ -2,9 +2,9 @@ DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 BASH := $(shell env bash -c 'which bash')
 ifeq ($(OS),Windows_NT)
     LDFLAGS=-lbcrypt -Wl,--subsystem,console
-	MKTARGETDIR=$(TOOLS)\mkreldir.exe $(dir $@)
+	MKTARGETDIR=mkreldir.exe $(dir $@)
 else
-	MKTARGETDIR=$(TOOLS)/mkreldir.exe $(dir $@)
+	MKTARGETDIR=mkdir -p $(dir $@)
 endif
 
 CXXFLAGS=-O -g -std=c++17 -I$(INC)
@@ -30,9 +30,9 @@ power-on-self-test:
 	"$(BASH)" -c 'echo "$(BASH)"'
 
 .PHONY: tools
-tools : $(TOOLS)/mkreldir.exe
+tools : mkreldir.exe
 
-$(TOOLS)/mkreldir.exe : $(TOOLS)/mkreldir.cpp
+mkreldir.exe : $(TOOLS)/mkreldir.cpp
 	$(CXX) -o $@ $(CXXFLAGS) $(TOOLS)/mkreldir.cpp
 
 $(TOOLS)/monitor.exe : $(TOOLS)/monitor.cpp
@@ -117,4 +117,4 @@ tests : tools test-randomize test-canary test-securedata test-securearray
 
 .PHONY: clean
 clean :
-	rm -rf tools/*.exe $(BUILD)/$(BIN) $(BUILD)/$(TESTBIN) $(BUILD)/$(TMP)
+	rm -rf mkreldir.exe $(BUILD)/$(BIN) $(BUILD)/$(TESTBIN) $(BUILD)/$(TMP)
