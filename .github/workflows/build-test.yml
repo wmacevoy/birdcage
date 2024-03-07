@@ -27,14 +27,14 @@ jobs:
         choco install make cmake
         echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
     - name: Build Unix
-      if: matrix.os != 'Windows-latest'
+      if: matrix.os != 'windows-latest'
       run: |
         mkdir build
         cd build
         cmake ..
         cmake --build .
     - name: Build Windows
-      if: matrix.os == 'Windows.latest'
+      if: matrix.os == 'windows.latest'
       run: |
         mkdir build
         cd build
@@ -42,12 +42,12 @@ jobs:
         cmake --build . --config Release
     
     - name: Test Unix
-      if: matrix.os != 'Windows-latest'
+      if: matrix.os != 'windows-latest'
       run: |
         cd build
         ctest
     - name: Test Windows
-      if: matrix.os == 'Windows.latest'
+      if: matrix.os == 'windows.latest'
       run: |
         cd build
         ctest --config Release
