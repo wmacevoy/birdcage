@@ -6,12 +6,15 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <direct.h>
+#include <tchar.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef UNICODE
 using sysstring = std::wstring;
+#define _tmkdir _wmkddir
 #else
 using sysstring = std::string;
+#define _tmkdir _mkdir
 #endif
 #else
 #include <unistd.h>

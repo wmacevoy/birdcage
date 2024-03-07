@@ -2,7 +2,7 @@ DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 BASH := $(shell env bash -c 'which bash')
 ifeq ($(OS),Windows_NT)
     LDFLAGS=-lbcrypt -Wl,--subsystem,console
-	MKTARGETDIR=$(TOOLS)/mkreldir.exe $(dir $@)
+	MKTARGETDIR=$(TOOLS)\mkreldir.exe $(dir $@)
 else
 	MKTARGETDIR=$(TOOLS)/mkreldir.exe $(dir $@)
 endif
