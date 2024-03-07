@@ -32,7 +32,7 @@ power-on-self-test:
  
 $(BUILD)/$(TMP)/monitor.cpp.o : $(TESTSRC)/monitor.cpp
 	$(MKTARGETDIR)
-	$(CXX) -o $@ $(CXXFLAGS) $< $(LDFLAGS)
+	$(CXX) -c -o $@ $(CXXFLAGS) $< $(LDFLAGS)
 
 $(BUILD)/$(TESTBIN)/monitor.exe : $(BUILD)/$(TMP)/monitor.cpp.o
 	$(MKTARGETDIR)
