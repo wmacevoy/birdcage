@@ -3,7 +3,7 @@ SHELL := $(shell env bash -c 'which bash')
 ifeq ($(OS),Windows_NT)
     LDFLAGS=-lbcrypt -Wl,--subsystem,console
 	MKTARGETDIR=mkdir $(dir $@) || true
-	FS:=$(shell echo "\\\\")
+	FS:=$(shell echo "\\")
 else
 	MKTARGETDIR=mkdir -p $(dir $@)
 	FS:=/
