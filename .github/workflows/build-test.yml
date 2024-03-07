@@ -26,28 +26,20 @@ jobs:
       run: |
         choco install mingw make
         echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
-    - name: make power-on-self-test
-      run: |
-        type bash
-        type mkdir
-        make power-on-self-test
-      shell: bash
+    - name: Build tools
+      run: make tools
     
     - name: Build and Test Randomize
       run: make test-randomize
-      shell: bash
 
     - name: Build and Test Canary
       run: make test-canary
-      shell: bash
 
     - name: Build and Test SecureData
       run: make test-securedata
-      shell: bash
 
     - name: Build and Test SecureArray
       run: make test-securearray
-      shell: bash
 
     - name: Success Message
       run: echo "Build and tests passed on all platforms."
