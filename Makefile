@@ -110,10 +110,10 @@ test-securearray : $(BUILD)/$(TESTBIN)/testsecurearray.exe $(BUILD)/$(TESTBIN)/m
 		$(BUILD)/$(TESTBIN)/monitor.exe fail $(BUILD)/$(TESTBIN)/testsecurearray.exe --ok=false
 
 .PHONY: all
-all : tools tests
+all : tests
 
 .PHONY: tests
-tests : test-randomize test-canary test-securedata test-securearray
+tests : tools test-randomize test-canary test-securedata test-securearray
 
 .PHONY: clean
 clean :
