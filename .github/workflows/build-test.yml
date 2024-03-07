@@ -26,17 +26,31 @@ jobs:
       run: |
         choco install make cmake
         echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
-    - name: Build
+    - name: Build Unix
+      if: matrix.os != 'Windows-latest'
       run: |
         mkdir build
         cd build
         cmake ..
         cmake --build .
+    - name: Build Windows
+      if: matrix.os == 'Windows.latest'
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build . --config Release
     
-    - name: Test
+    - name: Test Unix
+      if: matrix.os != 'Windows-latest'
       run: |
         cd build
         ctest
-
+    - name: Test Windows
+      if: matrix.os == 'Windows.latest'
+      run: |
+        cd build
+        ctest --config Release
+  
     - name: Success Message
       run: echo "Build and tests passed on all platforms."
