@@ -15,31 +15,28 @@ jobs:
 
     - name: Install GCC (Ubuntu)
       if: matrix.os == 'ubuntu-latest'
-      run: sudo apt-get update && sudo apt-get install -y g++ make
+      run: sudo apt-get update && sudo apt-get install -y g++ make cmake
 
     - name: Install GCC (macOS)
       if: matrix.os == 'macOS-latest'
-      run: brew install gcc
+      run: brew install gcc cmake
 
     - name: Install GCC (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        choco install mingw make
+        choco install mingw make cmake
         echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
-    - name: Build tools
-      run: make tools
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
     
-    - name: Build and Test Randomize
-      run: make test-randomize
-
-    - name: Build and Test Canary
-      run: make test-canary
-
-    - name: Build and Test SecureData
-      run: make test-securedata
-
-    - name: Build and Test SecureArray
-      run: make test-securearray
+    - name: Test
+      run: |
+        cd build
+        ctest
 
     - name: Success Message
       run: echo "Build and tests passed on all platforms."
