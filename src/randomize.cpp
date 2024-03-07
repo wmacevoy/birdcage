@@ -1,11 +1,13 @@
 #ifdef _WIN32
 #include <Windows.h>
 #include <bcrypt.h>
+#include <cstdlib>
 #pragma comment(lib, "bcrypt.lib")
 #include "birdcage/randomize.h"
 #else
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 #include "birdcage/randomize.h"
 #endif
 
@@ -14,9 +16,15 @@ namespace birdcage
 #ifdef _WIN32
   void randomize(void *data, size_t size)
   {
-    if (BCryptGenRandom(NULL, reinterpret_cast<PUCHAR>(data), size, BCRYPT_USE_SYSTEM_PREFERRED_RNG) != ERROR_SUCCESS)
+    while (size > 0)
     {
-      std::abort();
+      uint32_t read = (size <= 0x4000'0000UL) ? size : 0x4000'0000UL;
+      if (BCryptGenRandom(NULL, reinterpret_cast<PUCHAR>(data), read, BCRYPT_USE_SYSTEM_PREFERRED_RNG) != ERROR_SUCCESS)
+      {
+        std::abort();
+      }
+      size -= read;
+      data = (void *)(((uint8_t *)data) + read);
     }
   }
 #else
