@@ -3,10 +3,10 @@ SHELL := $(shell env bash -c 'which bash')
 ifeq ($(OS),Windows_NT)
     LDFLAGS=-lbcrypt -Wl,--subsystem,console
 	MKTARGETDIR=mkdir $(dir $@) || true
-	FS=$(shell echo "\\"")
+	FS:=$(shell echo "\\\\")
 else
 	MKTARGETDIR=mkdir -p $(dir $@)
-	FS=/
+	FS:=/
 endif
 
 DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -30,11 +30,10 @@ CXXFLAGS=-O -g -std=c++17 -I$(INC)
 
 .PHONY: power-on-self-test
 power-on-self-test:
-	"$(BASH)" -c 'type mkdir'
-	"$(BASH)" -c 'type bash'
-	"$(BASH)" -c 'echo "$(BASH)"'
-	echo $(FS)
-	echo $(MKTARGETDIR)
+	"$(SHELL)" -c 'type mkdir'
+	"$(SHELL)" -c 'type bash'
+	"$(SHELL)" -c 'echo "$(BASH)"'
+
 
 .PHONY: tools
 tools : mkreldir.exe
@@ -117,7 +116,7 @@ test-securearray : $(BUILD)/$(TESTBIN)/testsecurearray.exe $(BUILD)/$(TESTBIN)/m
 		$(BUILD)/$(TESTBIN)/monitor.exe fail $(BUILD)/$(TESTBIN)/testsecurearray.exe --ok=false
 
 .PHONY: all
-all : tests
+all : power-on-self-test tools tests
 
 .PHONY: tests
 tests : tools test-randomize test-canary test-securedata test-securearray
