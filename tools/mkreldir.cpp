@@ -54,6 +54,7 @@ void makedir(const sysstring &dir)
   int status = mkdir(dir.c_str(), mode);
   if (status != 0 && errno != EEXIST)
   {
+    std::cerr << "mkdir " << dir << " failed" << std::endl;
     exit(1);
   }
 #endif
@@ -64,6 +65,7 @@ void changedir(const sysstring &dir)
   int status = _tchdir(dir.c_str());
   if (status != 0)
   {
+    std::cerr << "chdir " << dir << " failed" << std::endl;
     exit(1);
   }
 }
@@ -86,6 +88,7 @@ void mkreldir(const sysstring &dirs)
     {
       if (depth == 0)
       {
+        std::cerr << "chdir out of base directory" << std::endl;
         exit(1);
       }
       --depth;
