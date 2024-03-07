@@ -1,5 +1,15 @@
+SHELL := $(shell env bash -c 'which bash')
+
+ifeq ($(OS),Windows_NT)
+    LDFLAGS=-lbcrypt -Wl,--subsystem,console
+	MKTARGETDIR=mkdir $(dir $@) || true
+	FS=$(shell echo "\\"")
+else
+	MKTARGETDIR=mkdir -p $(dir $@)
+	FS=/
+endif
+
 DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-BASH := $(shell env bash -c 'which bash')
 TOOLS=tools
 BUILD=build
 SRC=src
@@ -14,14 +24,6 @@ VERSION_MINOR=0
 VERSION_PATCH=0
 VER=$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 
-ifeq ($(OS),Windows_NT)
-    LDFLAGS=-lbcrypt -Wl,--subsystem,console
-	MKTARGETDIR=mkdir $(dir $@) || true
-	FS=\
-else
-	MKTARGETDIR=mkdir -p $(dir $@)
-	FS=/
-endif
 
 CXXFLAGS=-O -g -std=c++17 -I$(INC)
 
@@ -31,6 +33,8 @@ power-on-self-test:
 	"$(BASH)" -c 'type mkdir'
 	"$(BASH)" -c 'type bash'
 	"$(BASH)" -c 'echo "$(BASH)"'
+	echo $(FS)
+	echo $(MKTARGETDIR)
 
 .PHONY: tools
 tools : mkreldir.exe
