@@ -2,13 +2,14 @@ DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 BASH := $(shell env bash -c 'which bash')
 ifeq ($(OS),Windows_NT)
     LDFLAGS=-lbcrypt -Wl,--subsystem,console
-	MKTARGETDIR=mkdir $(subst /,\,$(dir $@))
+	MKTARGETDIR=$(TOOLS)/mkreldir.exe $(dir $@)
 else
-	MKTARGETDIR=mkdir -p $(dir $@)
+	MKTARGETDIR=$(TOOLS)/mkreldir.exe $(dir $@)
 endif
 
 CXXFLAGS=-O -g -std=c++17 -I$(INC)
 
+TOOLS=tools
 BUILD=build
 SRC=src
 LIB=lib
@@ -27,7 +28,16 @@ power-on-self-test:
 	"$(BASH)" -c 'type mkdir'
 	"$(BASH)" -c 'type bash'
 	"$(BASH)" -c 'echo "$(BASH)"'
- 
+
+.PHONY: tools
+tools : $(TOOLS)/mkreldir.exe
+
+$(TOOLS)/mkreldir.exe : $(TOOLS)/mkreldir.cpp
+	$(CXX) -o $@ $(CXXFLAGS) $(TOOLS)/mkreldir.cpp
+
+$(TOOLS)/monitor.exe : $(TOOLS)/monitor.cpp
+	$(CXX) -o $@ $(CXXFLAGS) $(TOOLS)/monitor.cpp
+
 $(BUILD)/$(TMP)/monitor.cpp.o : $(TESTSRC)/monitor.cpp
 	$(MKTARGETDIR)
 	$(CXX) -c -o $@ $(CXXFLAGS) $< $(LDFLAGS)
@@ -100,11 +110,11 @@ test-securearray : $(BUILD)/$(TESTBIN)/testsecurearray.exe $(BUILD)/$(TESTBIN)/m
 		$(BUILD)/$(TESTBIN)/monitor.exe fail $(BUILD)/$(TESTBIN)/testsecurearray.exe --ok=false
 
 .PHONY: all
-all : tests
+all : tools tests
 
 .PHONY: tests
-tests : POST test-randomize test-canary test-securedata test-securearray
+tests : test-randomize test-canary test-securedata test-securearray
 
 .PHONY: clean
 clean :
-	rm -rf $(BUILD)/$(BIN) $(BUILD)/$(TESTBIN) $(BUILD)/$(TMP)
+	rm -rf tools/*.exe $(BUILD)/$(BIN) $(BUILD)/$(TESTBIN) $(BUILD)/$(TMP)
