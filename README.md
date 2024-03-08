@@ -58,7 +58,7 @@ Since everything is managed with constructors and destructors, you could instead
 constexpr size_t bufferSize = 4'096;
 
 void useBuffer() {
-  auto safe = std::shared_ptr < birdcage::SecureArray<uint8_t,bufferSize> > ();
+  auto safe = std::make_shared < birdcage::SecureArray<uint8_t,bufferSize> > ();
   auto & buffer = safe->data;
 
   // use buffer as before, when refence count to safe goes to zero, the destuctor checks and cleans it,
