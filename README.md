@@ -71,6 +71,7 @@ void useBuffer() {
 If you have more structured data to manage, you can create a flat memory struct (no dynamic objects) with
 a static `reset(data)` method which describes how to scrub the data before and after use.
 
+```C++
 template <size_t _bitsize, uint8_t _rounds>
 struct CipherEnv {
   static constexpr size_t bitsize = _bitsize;
