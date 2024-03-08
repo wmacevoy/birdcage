@@ -29,18 +29,18 @@ The easiest to use is SecureArray, which is a batteries-included secure solution
 constexpr size_t bufferSize = 4'096;
 
 void useBuffer() {
-  birdcage::SecureArray<uint8_t,bufferSize> safe;
+  birdcage::SecureArray<uint8_t,bufferSize> sec;
   // buffer is
   //  * of type std::array < uint8_t , bufferSize >
   //  * initialized zeros (default uint8_t)
   //  * locked from page swap
   //  * surrounded by two canary values
-  auto& buffer = safe.data;
+  auto& buffer = sec.data;
 
   // TODO use buffer
 
   // die if a memory corruption is detected
-  safe.check(); 
+  sec.check(); 
 
   // TODO use buffer more
 
@@ -58,11 +58,11 @@ Since everything is managed with constructors and destructors, you could instead
 constexpr size_t bufferSize = 4'096;
 
 void useBuffer() {
-  auto safe = std::make_shared < birdcage::SecureArray<uint8_t,bufferSize> > ();
-  auto & buffer = safe->data;
+  auto sec = std::make_shared < birdcage::SecureArray<uint8_t,bufferSize> > ();
+  auto & buffer = sec->data;
 
   // use buffer as before, when refence count to safe goes to zero, the destuctor checks and cleans it,
-  // with safe->check() as you see fit.
+  // with sec->check() as you see fit.
 }
 ```
 
@@ -95,9 +95,9 @@ using AES256Env = CipherEnv < 256, 14 >;
 using AES256SecEnv = birdcage::SecureData < AES256Env , AES256Env::reset >;
 
 void pipeline() {
-  AES256SecEnv safe;
-  AES256Env &env = safe.data;
-  // TODO: Use env and safe.check() here...
+  AES256SecEnv sec;
+  AES256Env &env = sec.data;
+  // TODO: Use env and sec.check() here...
 }
 ```
 
