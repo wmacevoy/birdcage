@@ -94,23 +94,11 @@ using AES256Env = CipherEnv < 256, 14 >;
 // use a custom reset for this secure data
 using AES256SecEnv = birdcage::SecureData < AES256Env , AES256Env::reset >;
 
-void pipeline(AES256SecEnv &safe) {
-  AES256Env &env = safe.data;
-
-  // TODO: Use env and safe.check() here...
-  
-}
-
-void stackEnv() {
+void pipeline() {
   AES256SecEnv safe;
-  pipeline(safe);
+  AES256Env &env = safe.data;
+  // TODO: Use env and safe.check() here...
 }
-
-void heapEnv() {
-  auto safe = std::shared_ptr < AES256SecEnv > safe;
-  pipeline(*safe);
-}
-
 ```
 
 # Classes
